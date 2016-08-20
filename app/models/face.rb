@@ -452,30 +452,35 @@ def self.pil2(file1,file2)
     cn=h.count
     f1=f1.drop(1)
     f2=f2.drop(1)
-    f1.each do |i|
-      f2.each do |j|
-        if i[0]==j[0] and i[1]==j[1]
-          c << j.take(19)
-          d << j.last(2)
-          j.each do |k|
-            unless h.index(k).nil?
-              temp=h.index(k)
-              #next if i[temp].nil?
-              if temp.nil?
-                a<<[k,nil,nil]
-              else
-                a<<[k,i[temp],i[temp+1]]
+      f1.each do |i|
+        f2.each do |j|
+          if i[0]==j[0] and i[1]==j[1]
+            c << j.take(2)
+            #d << j.last(2)
+            j=j.drop(2)
+              j.each do |k|
+                unless k.nil?
+                  if h.index(k).nil?
+                    a<<[k,nil,nil]
+                  else
+                    temp=h.index(k)
+                    #next if i[temp].nil?
+                      if temp.nil?
+                        a<<[k,nil,nil]
+                      else
+                        a<<[k,i[temp],i[temp+1]]
+                      end
+                  end
+                end
               end
-            end
+              break if i[0]==j[0] and i[1]==j[1]
           end
-          break if i[0]==j[0] and i[1]==j[1]
         end
+        b<<[[c,a]].flatten#.insert(h1.index(h1[-2]),d.flatten[0]).insert(h1.index(h1[-1]),d.flatten[1])].flatten
+        a.clear
+        c.clear
+        #d.clear
       end
-      b<<[[c,a].flatten.insert(h1.index(h1[-2]),d.flatten[0]).insert(h1.index(h1[-1]),d.flatten[1])].flatten
-      a.clear
-      c.clear
-      d.clear
-    end
     CSV.open("#{Rails.root}/public/files/Output_file.csv","w") do |csv|
       csv << h1.flatten
       b.each do |p|
