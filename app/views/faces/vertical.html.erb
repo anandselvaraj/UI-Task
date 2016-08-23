@@ -23,8 +23,10 @@
 
   <tr>
    <td> <%= f.submit "Convert",:class => "btn btn-info" %></td>
-   <td><a href="https://ui-task.herokuapp.com/faces/help_ver"  target="popup"
-  onclick="window.open('https://ui-task.herokuapp.com/faces/help_ver','popup','width=700,height=400'); return false;"> Help</a></td>
+   <td><%= link_to "Help", image_path("Vertical_help.png"), :target => "_blank" %>
+    
+    <!--a href="https://ui-task.herokuapp.com/faces/help_ver"  target="popup"
+  onclick="window.open('https://ui-task.herokuapp.com/faces/help_ver','popup','width=700,height=400'); return false;"> Help</a--></td>
   </tr>
 
  <% end %>

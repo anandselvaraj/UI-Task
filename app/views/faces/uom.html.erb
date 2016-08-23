@@ -28,8 +28,9 @@
 
  <tr>
   <td> <%= f.submit "Upload",:class=>"btn btn-info"%></td>
-  <td><a href="http://192.168.1.52:3000/faces/help_ver"  target="popup"
-  onclick="window.open('http://192.168.1.52:3000/faces/help_uom','popup','width=700,height=400'); return false;"> Help</a></td>
+  <td><%= link_to "Help", image_path("UOM_help.png"), :target => "_blank" %>
+  <!--a href="http://192.168.1.52:3000/faces/help_ver"  target="popup"
+  onclick="window.open('http://192.168.1.52:3000/faces/help_uom','popup','width=700,height=400'); return false;"> Help</a--></td>
  </tr>
 
  <% end %>
