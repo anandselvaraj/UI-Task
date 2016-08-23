@@ -444,6 +444,8 @@ def self.pil2(file1,file2)
     f1,f2=[],[]
     a,b,c,d=[],[],[],[]
     h=[]
+    fr=[]
+    cnt=0
     f1=CSV.read(file1.tempfile)
     f2=CSV.read(file2.tempfile)
     h=f1.take(1)
@@ -452,42 +454,51 @@ def self.pil2(file1,file2)
     cn=h.count
     f1=f1.drop(1)
     f2=f2.drop(1)
-      f1.each do |i|
-        f2.each do |j|
-          if i[0]==j[0] and i[1]==j[1]
-            c << j.take(2)
-            #d << j.last(2)
-            j=j.drop(2)
-              j.each do |k|
-                unless k.nil?
-                  if h.index(k).nil?
-                    a<<[k,nil,nil]
-                  else
-                    temp=h.index(k)
-                    #next if i[temp].nil?
-                      if temp.nil?
-                        a<<[k,nil,nil]
-                      else
-                        a<<[k,i[temp],i[temp+1]]
-                      end
-                  end
+    h1.each {|i| unless i.start_with?"Att" or i.start_with?"Val" or i.start_with?"UOM" or i.start_with?"Allotted" or i.start_with?"Overall" then cnt=cnt+1 end } 
+    f1.each do |i|
+      f2.each do |j|
+        if i[0]==j[0] and i[1]==j[1]
+          for m in (0..cnt)
+            if i[m]==j[m]
+              fr<<j[m]
+            end
+          end
+          #c << j.take(2)
+          d << j.last(2)
+          j=j.drop(cnt)
+          j.pop(2)
+          j.each do |k|
+            unless k.nil?
+              if h.index(k).nil?
+                a<<[k,nil,nil]
+              else
+                temp=h.index(k)
+                #next if i[temp].nil?
+                if temp.nil?
+                  a<<[k,nil,nil]
+                else
+                  a<<[k,i[temp],i[temp+1]]
                 end
               end
-              break if i[0]==j[0] and i[1]==j[1]
-          end
+            end
+          end 
+          break if i[0]==j[0] and i[1]==j[1]
         end
-        b<<[[c,a]].flatten#.insert(h1.index(h1[-2]),d.flatten[0]).insert(h1.index(h1[-1]),d.flatten[1])].flatten
-        a.clear
-        c.clear
-        #d.clear
       end
+      #fr.pop until fr.last #to remove nil values at the end
+      b<<[[fr,a].flatten.insert(h1.index(h1[-2]),d.flatten[0]).insert(h1.index(h1[-1]),d.flatten[1])].flatten
+      a.clear
+      #c.clear
+      fr.clear
+      d.clear
+    end
     CSV.open("#{Rails.root}/public/files/Output_file.csv","w") do |csv|
       csv << h1.flatten
       b.each do |p|
         csv << p
       end
     end
-end
+  end
 
 
   end
